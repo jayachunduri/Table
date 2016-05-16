@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<!--[if lte IE 6]><html class="preIE7 preIE8 preIE9"><![endif]-->
+<!--[if IE 7]><html class="preIE8 preIE9"><![endif]-->
+<!--[if IE 8]><html class="preIE9"><![endif]-->
+<!--[if gte IE 9]><!--><html><!--<![endif]-->
+    <head>
+        <meta charset="UTF-8">
+        <title>Sortable Table with Static Headers</title>
+        
+        <!--Framework Imports-->
+        <script src="./js/jquery/jquery-1.9.1.min.js"></script>
+	    <script src="./js/angular/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
+
+        <!--Our Custom CSS-->
+        <link rel="stylesheet" type="text/css" href="./css/sortable.table.component.css">
+        
+        <!--Our Javascript files-->
+        <script src="./controllers/sortable.table.component.js"></script>
+		<script src="./directives/uparrow-button.js"></script>
+		<script src="./directives/downarrow-button.js"></script>
+        
+    </head>
+    <body ng-app="SortableTable">
+        
+        <div ng-controller="sortableTableController">
+            <div id="tableHead">
+                <table>
+                    <thead>
+                        <tr>
+                            <th id="name">
+                                Name
+								<!-- Removed code for showing arrow buttons based on value of asc. 
+								Beacuse if you order a row ascending, order of other rows gets messed up. -->
+                                <span ng-hide="obj.asc">
+								<!-- added custom attribute directives for arrow buttons -->
+									<uparrow-button  sortValue="predicateCategory.name">
+									</uparrow-button> 
+								</span>
+                                <span ng-hide="!obj.asc">
+									<downarrow-button sortValue="predicateCategory.name">
+									</downarrow-button>
+								</span>
+                            </th>
+                            <th id="type">
+                                Food Group
+                                <span ng-hide="obj.asc">
+									<uparrow-button  sortValue="predicateCategory.type">
+									</uparrow-button> 
+								</span>
+                                <span ng-hide="!obj.asc">
+									<downarrow-button sortValue="predicateCategory.type">
+									</downarrow-button>
+								</span>
+                            </th>
+                            <th id="price">
+                                Price per unit
+                                <span ng-hide="obj.asc">
+									<uparrow-button  sortValue="predicateCategory.price">
+									</uparrow-button>
+								</span>
+                                <span ng-hide="!obj.asc">
+									<downarrow-button sortValue="predicateCategory.price">
+									</downarrow-button>
+								</span>
+                            </th>
+                            <th id="unit">
+                                Unit
+                                <span ng-hide="obj.asc">
+									<uparrow-button  sortValue="predicateCategory.unit">
+									</uparrow-button>
+								</span>
+                                <span ng-hide="!obj.asc">
+									<downarrow-button sortValue="predicateCategory.unit">
+									</downarrow-button>
+								</span>
+                            </th>
+                            <th id="stock">
+                                In Stock
+                                <span ng-hide="obj.asc">
+									<uparrow-button  sortValue="predicateCategory.stock">
+									</uparrow-button>
+								</span>
+								<span ng-hide="!obj.asc">
+									<downarrow-button sortValue="predicateCategory.demand">
+									</downarrow-button>
+								</span>
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div id="tableBody">
+                <table>
+                    <tbody>
+					<!-- calling order() function in controller -->
+                        <tr ng-repeat="food in foodArray" "order()" ng-class="{out: food.stock === 0}">
+                            <td>{{food.name}}</td>
+                            <td>
+							<!-- Is the requirement is user can select any (even irrelevant) food group? For Ex: selecting meat as food group for coffee? -->
+							<!-- Right now there is a bug that user's selection goes away after refresh, because we are not saving it to the database -->
+                                <select ng-model="food.type">
+                                    <option ng-repeat="foodGroup in foodGroups">{{foodGroup}}</option>
+                                </select>
+                            </td>
+                            <td>{{food.price}}</td>
+                            <td>{{food.unit}}</td>
+                            <td >{{food.stock}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+         
+    </body>
+</html>
